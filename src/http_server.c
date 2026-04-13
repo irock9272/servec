@@ -7,9 +7,12 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include "config.h"
 
-#define PORT 8080
 #define BUFFER_SIZE 4096
+
+// Global configuration
+static ServerConfig g_config;
 
 const char* get_mime_type(const char* path) {
     const char* ext = strrchr(path, '.');
@@ -40,9 +43,71 @@ void send_response(int client_socket, const char* status, const char* content_ty
     }
 }
 
+char* load_file_content(const char* filepath, size_t* out_size) {
+    int file = open(filepath, O_RDONLY);
+    if (file < 0) {
+        return NULL;
+    }
+    
+    struct stat stat_buf;
+    if (fstat(file, &stat_buf) < 0) {
+        close(file);
+        return NULL;
+    }
+    
+    char* content = malloc(stat_buf.st_size);
+    if (!content) {
+        close(file);
+        return NULL;
+    }
+    
+    size_t bytes_read = read(file, content, stat_buf.st_size);
+    close(file);
+    
+    if (out_size) *out_size = bytes_read;
+    return content;
+}
+
 void send_404(int client_socket) {
-    const char* body = "<html><body><h1>404 Not Found</h1></body></html>";
-    send_response(client_socket, "404 Not Found", "text/html", body, strlen(body));
+    char* body = NULL;
+    size_t body_len = 0;
+    const char* content_type = "text/html";
+    
+    // Try to load custom 404 page
+    if (g_config.use_custom_404 && g_config.error_404[0]) {
+        body = load_file_content(g_config.error_404, &body_len);
+    }
+    
+    // Use default if custom not available
+    if (!body) {
+        const char* default_body = "<html><body><h1>404 Not Found</h1></body></html>";
+        body = strdup(default_body);
+        body_len = strlen(default_body);
+    }
+    
+    send_response(client_socket, "404 Not Found", content_type, body, body_len);
+    free(body);
+}
+
+void send_500(int client_socket) {
+    char* body = NULL;
+    size_t body_len = 0;
+    const char* content_type = "text/html";
+    
+    // Try to load custom 500 page
+    if (g_config.use_custom_500 && g_config.error_500[0]) {
+        body = load_file_content(g_config.error_500, &body_len);
+    }
+    
+    // Use default if custom not available
+    if (!body) {
+        const char* default_body = "<html><body><h1>500 Internal Server Error</h1></body></html>";
+        body = strdup(default_body);
+        body_len = strlen(default_body);
+    }
+    
+    send_response(client_socket, "500 Internal Server Error", content_type, body, body_len);
+    free(body);
 }
 
 void handle_request(int client_socket) {
@@ -85,48 +150,46 @@ void handle_request(int client_socket) {
         return;
     }
     
-    // Remove leading slash for file path
-    char* filepath = path + 1;
+    // Build full filepath with root_dir
+    char filepath[MAX_PATH_LEN];
+    snprintf(filepath, sizeof(filepath), "%s%s", g_config.root_dir, path);
     
     // Try to open the file
-    int file = open(filepath, O_RDONLY);
-    if (file < 0) {
-        send_404(client_socket);
-        close(client_socket);
-        return;
-    }
-    
-    // Get file size
-    struct stat stat_buf;
-    if (fstat(file, &stat_buf) < 0) {
-        close(file);
-        send_404(client_socket);
-        close(client_socket);
-        return;
-    }
-    
-    // Read file content
-    char* file_content = malloc(stat_buf.st_size);
+    char* file_content = load_file_content(filepath, NULL);
     if (!file_content) {
-        close(file);
         send_404(client_socket);
         close(client_socket);
         return;
     }
     
-    size_t bytes_file = read(file, file_content, stat_buf.st_size);
-    close(file);
+    // Get file size for response
+    struct stat stat_buf;
+    if (stat(filepath, &stat_buf) < 0) {
+        free(file_content);
+        send_500(client_socket);
+        close(client_socket);
+        return;
+    }
     
     // Send response
     const char* mime_type = get_mime_type(filepath);
-    send_response(client_socket, "200 OK", mime_type, file_content, bytes_file);
+    send_response(client_socket, "200 OK", mime_type, file_content, stat_buf.st_size);
     
     free(file_content);
     close(client_socket);
 }
 
 int main(int argc, char* argv[]) {
-    int port = PORT;
+    // Load configuration
+    bool config_loaded = load_config(&g_config);
+    if (config_loaded) {
+        printf("Configuration loaded from: %s\n", get_config_dir());
+    } else {
+        printf("Using default configuration\n");
+    }
+    
+    // Allow command line override for port
+    int port = g_config.port;
     if (argc > 1) {
         port = atoi(argv[1]);
     }
@@ -157,6 +220,7 @@ int main(int argc, char* argv[]) {
     }
     
     printf("Server running on http://localhost:%d\n", port);
+    printf("Serving files from: %s\n", g_config.root_dir);
     printf("Press Ctrl+C to stop\n");
     
     while (1) {
