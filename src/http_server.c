@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include "config.h"
+#include "safety.h"
 
 #define BUFFER_SIZE 4096
 
@@ -124,6 +125,12 @@ void handle_request(int client_socket) {
     // Parse the request path
     char method[16], path[256], protocol[16];
     if (sscanf(buffer, "%15s %255s %15s", method, path, protocol) != 3) {
+        send_404(client_socket);
+        close(client_socket);
+        return;
+    }
+    
+    if (!is_path_safe(path) || !is_ext_allowed(path, &g_config)) {
         send_404(client_socket);
         close(client_socket);
         return;

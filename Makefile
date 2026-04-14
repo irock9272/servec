@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -O2
 SRCDIR = src
 BUILDDIR = build
 TARGET = $(BUILDDIR)/servec
-SRCS = $(SRCDIR)/http_server.c $(SRCDIR)/config.c
+SRCS = $(SRCDIR)/http_server.c $(SRCDIR)/config.c $(SRCDIR)/safety.c
 
 all: $(TARGET)
 

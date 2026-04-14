@@ -63,6 +63,16 @@ bool load_config(ServerConfig* config) {
     config->use_custom_404 = false;
     config->use_custom_500 = false;
     
+    // Seed default allowed extensions
+    const char* defaults[] = {".html", ".css", ".js", ".png", ".jpg", ".jpeg", ".gif"};
+    int num_defaults = 7;
+    for (int i = 0; i < num_defaults; i++) {
+        strncpy(config->allowed_exts[i], defaults[i], 15);
+        config->allowed_exts[i][15] = '\0';
+    }
+    config->allowed_exts_count = num_defaults;
+    config->use_allowed_exts = true;
+    
     // Build config file path
     char config_path[MAX_PATH_LEN];
     snprintf(config_path, sizeof(config_path), "%s/%s", get_config_dir(), CONFIG_FILE_NAME);
@@ -102,6 +112,19 @@ bool load_config(ServerConfig* config) {
             strncpy(config->error_500, value, MAX_PATH_LEN - 1);
             config->error_500[MAX_PATH_LEN - 1] = '\0';
             config->use_custom_500 = true;
+        } else if (strcmp(key, "extra_exts") == 0) {
+            char* exts_copy = strdup(value);
+            char* token = strtok(exts_copy, ",");
+            while (token != NULL && config->allowed_exts_count < 20) {
+                char* trimmed_ext = trim(token);
+                if (trimmed_ext[0] != '\0') {
+                    strncpy(config->allowed_exts[config->allowed_exts_count], trimmed_ext, 15);
+                    config->allowed_exts[config->allowed_exts_count][15] = '\0';
+                    config->allowed_exts_count++;
+                }
+                token = strtok(NULL, ",");
+            }
+            free(exts_copy);
         }
     }
     
