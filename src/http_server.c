@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -154,6 +155,25 @@ void handle_request(int client_socket) {
     char filepath[MAX_PATH_LEN];
     snprintf(filepath, sizeof(filepath), "%s%s", g_config.root_dir, path);
     
+    
+    // Check if file extension is allowed
+    if (g_config.use_allowed_exts && g_config.allowed_exts_count > 0) {
+        const char* ext = strrchr(filepath, '.');
+        if (ext) {
+            bool ext_allowed = false;
+            for (int i = 0; i < g_config.allowed_exts_count; i++) {
+                if (strcmp(ext, g_config.allowed_exts[i]) == 0) {
+                    ext_allowed = true;
+                    break;
+                }
+            }
+            if (!ext_allowed) {
+                send_404(client_socket);
+                close(client_socket);
+                return;
+            }
+        }
+    }
     // Try to open the file
     char* file_content = load_file_content(filepath, NULL);
     if (!file_content) {
