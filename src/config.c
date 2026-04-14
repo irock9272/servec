@@ -72,6 +72,7 @@ bool load_config(ServerConfig* config) {
     }
     config->allowed_exts_count = num_defaults;
     config->use_allowed_exts = true;
+    config->thread_pool_size = DEFAULT_THREAD_POOL_SIZE;
     
     // Build config file path
     char config_path[MAX_PATH_LEN];

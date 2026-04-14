@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="error.css">
+</head>
+<body>
+    <div class="container">
+        <div class="error-content">
+            <div class="error-code">404</div>
+            <h1>Page Not Found</h1>
+            <p>The requested resource could not be located on this server.</p>
+
+            <div class="error-details">
+                <div class="detail-item">
+                    <span class="detail-label">Request:</span>
+                    <span class="detail-value" id="request-path">Unknown</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Server:</span>
+                    <span class="detail-value">servec/1.0.0</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time:</span>
+                    <span class="detail-value" id="error-time">Loading...</span>
+                </div>
+            </div>
+
+            <div class="error-actions">
+                <a href="/" class="error-btn primary">Return Home</a>
+                <a href="features.html" class="error-btn secondary">View Features</a>
+            </div>
+
+            <div class="error-visual">
+                <div class="circuit-pattern">
+                    <div class="node"></div>
+                    <div class="node"></div>
+                    <div class="node"></div>
+                    <div class="connection"></div>
+                    <div class="connection"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="error.js"></script>
+</body>
+</html>

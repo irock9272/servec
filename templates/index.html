@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>servec - Next-Gen HTTP Server</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="hero">
+            <div class="hero-content">
+                <h1 class="title">servec</h1>
+                <p class="subtitle">A lightweight HTTP server written in C</p>
+                <p class="hero-text">Simple, fast, and straightforward. Perfect for development and serving static files with minimal overhead.</p>
+            </div>
+            <div class="hero-visual">
+                <div class="server-icon">
+                    <div class="pulse"></div>
+                    <div class="core"></div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav">
+            <a href="features.html" class="nav-link">Features</a>
+            <a href="architecture.html" class="nav-link">Architecture</a>
+        </nav>
+
+        <section class="overview">
+            <h2>Core Features</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Thread Pool</h3>
+                    <p>Multi-threaded request handling for concurrent connections. Configurable worker count.</p>
+                </div>
+                <div class="card">
+                    <h3>Security</h3>
+                    <p>Directory traversal protection, extension whitelisting, and blocked sensitive paths (.git, .env, src/).</p>
+                </div>
+                <div class="card">
+                    <h3>Configuration</h3>
+                    <p>INI-style config files with custom error pages, MIME type detection, and port configuration.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

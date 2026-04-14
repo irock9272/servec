@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - servec</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="features.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <h1>Core Features</h1>
+            <p class="page-subtitle">What makes servec the future of web serving</p>
+        </header>
+
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Written in pure C for maximum performance. No unnecessary overhead, just raw speed.</p>
+                <div class="feature-specs">
+                    <span class="spec">Response Time: &lt;1ms</span>
+                    <span class="spec">Memory Usage: Minimal</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Security First</h3>
+                <p>Built-in protection against directory traversal attacks and sensitive file access.</p>
+                <div class="feature-specs">
+                    <span class="spec">Blocked: .git, .env, src/, build/</span>
+                    <span class="spec">Extension Whitelisting</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Custom Error Pages</h3>
+                <p>Fully customizable 404 and 500 error pages. Serve exactly what your users expect.</p>
+                <div class="feature-specs">
+                    <span class="spec">404: Page Not Found</span>
+                    <span class="spec">500: Server Error</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Configuration</h3>
+                <p>Flexible configuration system with support for custom ports, root directories, and more.</p>
+                <div class="feature-specs">
+                    <span class="spec">Config: ~/.config/servec/config</span>
+                    <span class="spec">Format: INI-style</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📁</div>
+                <h3>MIME Type Detection</h3>
+                <p>Automatic content-type detection for HTML, CSS, JavaScript, images, and more.</p>
+                <div class="feature-specs">
+                    <span class="spec">HTML, CSS, JS</span>
+                    <span class="spec">PNG, JPG, GIF</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Thread Pool</h3>
+                <p>Multi-threaded request handling with configurable worker pool for high concurrency.</p>
+                <div class="feature-specs">
+                    <span class="spec">Default: 4 threads</span>
+                    <span class="spec">Configurable</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="code-example">
+            <h2>Configuration Example</h2>
+            <div class="code-block">
+                <pre><code># servec configuration file
+port = 6969
+root_dir = ./public
+error_404 = ./templates/error_404.html
+error_500 = ./templates/error_500.html</code></pre>
+            </div>
+        </section>
+
+        <section class="comparison">
+            <h2>Why servec?</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h4>Compiled Binary</h4>
+                    <p>Written in C and compiled to a single executable. No runtime dependencies or interpreters.</p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Thread Pool</h4>
+                    <p>Built-in multi-threading with configurable worker pool for handling concurrent requests efficiently.</p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Security by Default</h4>
+                    <p>Directory traversal protection and configurable file whitelisting prevent common vulnerabilities.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="features.js"></script>
+</body>
+</html>

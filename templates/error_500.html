@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="error.css">
+</head>
+<body>
+    <div class="container">
+        <div class="error-content">
+            <div class="error-code">500</div>
+            <h1>Internal Server Error</h1>
+            <p>An unexpected error occurred while processing your request.</p>
+
+            <div class="error-details">
+                <div class="detail-item">
+                    <span class="detail-label">Error ID:</span>
+                    <span class="detail-value" id="error-id">SRV-500-001</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Server:</span>
+                    <span class="detail-value">servec/1.0.0</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time:</span>
+                    <span class="detail-value" id="error-time">Loading...</span>
+                </div>
+            </div>
+
+            <div class="error-message">
+                <p>This error has been logged and will be investigated by our engineering team.</p>
+            </div>
+
+            <div class="error-actions">
+                <a href="/" class="error-btn primary">Return Home</a>
+                <button onclick="window.location.reload()" class="error-btn secondary">Try Again</button>
+            </div>
+
+            <div class="error-visual">
+                <div class="warning-icon">⚠️</div>
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring delay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="error.js"></script>
+</body>
+</html>

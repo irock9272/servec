@@ -9,11 +9,13 @@
 #include <sys/stat.h>
 #include "config.h"
 #include "safety.h"
+#include "thread_pool.h"
 
 #define BUFFER_SIZE 4096
 
 // Global configuration
 static ServerConfig g_config;
+static thread_pool_t g_thread_pool;
 
 const char* get_mime_type(const char* path) {
     const char* ext = strrchr(path, '.');
@@ -111,7 +113,9 @@ void send_500(int client_socket) {
     free(body);
 }
 
-void handle_request(int client_socket) {
+void handle_request(void* arg) {
+    int client_socket = *(int*)arg;
+    free(arg);
     char buffer[BUFFER_SIZE];
     int bytes_read = read(client_socket, buffer, sizeof(buffer) - 1);
     
@@ -230,6 +234,9 @@ int main(int argc, char* argv[]) {
     printf("Serving files from: %s\n", g_config.root_dir);
     printf("Press Ctrl+C to stop\n");
     
+    // Initialize thread pool
+    thread_pool_init(&g_thread_pool, g_config.thread_pool_size);
+    
     while (1) {
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
@@ -240,8 +247,14 @@ int main(int argc, char* argv[]) {
             continue;
         }
         
-        handle_request(client_socket);
+        int* client_sock_ptr = malloc(sizeof(int));
+        *client_sock_ptr = client_socket;
+        thread_pool_submit(&g_thread_pool, handle_request, client_sock_ptr);
     }
+    
+    // Shutdown thread pool
+    thread_pool_wait(&g_thread_pool);
+    thread_pool_destroy(&g_thread_pool);
     
     close(server_socket);
     return 0;

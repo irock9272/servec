@@ -7,6 +7,7 @@
 #define DEFAULT_ROOT_DIR "."
 #define MAX_PATH_LEN 512
 #define DEFAULT_ALLOWED_EXTS_COUNT 7
+#define DEFAULT_THREAD_POOL_SIZE 4
 
 typedef struct {
     int port;
@@ -17,6 +18,7 @@ typedef struct {
     bool use_custom_500;
     char allowed_exts[20][16];
     int allowed_exts_count;
+    int thread_pool_size;
     bool use_allowed_exts;
 } ServerConfig;
 

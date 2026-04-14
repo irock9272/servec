@@ -1,9 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2
+CFLAGS = -Wall -Wextra -O2 -pthread
 SRCDIR = src
 BUILDDIR = build
 TARGET = $(BUILDDIR)/servec
-SRCS = $(SRCDIR)/http_server.c $(SRCDIR)/config.c $(SRCDIR)/safety.c
+SRCS = $(SRCDIR)/http_server.c $(SRCDIR)/config.c $(SRCDIR)/safety.c $(SRCDIR)/thread_pool.c
 
 all: $(TARGET)
 

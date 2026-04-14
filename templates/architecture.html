@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - servec</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="architecture.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <h1>Architecture</h1>
+            <p class="page-subtitle">How servec works</p>
+        </header>
+
+        <section class="architecture-overview">
+            <h2>Design Principles</h2>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <h3>Minimal Dependencies</h3>
+                    <p>Written in pure C with only standard library calls. Single compiled binary with no external dependencies to manage.</p>
+                </div>
+                <div class="principle-card">
+                    <h3>Thread Pool Architecture</h3>
+                    <p>Pre-allocated worker threads handle incoming requests. Eliminates per-request thread creation overhead. Configurable pool size.</p>
+                </div>
+                <div class="principle-card">
+                    <h3>Direct File Serving</h3>
+                    <p>Files served directly with minimal buffering. Automatic MIME type detection based on file extensions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Security Features</h2>
+            <div class="security-list">
+                <div class="security-item">
+                    <h4>Directory Traversal Protection</h4>
+                    <p>Detects and blocks <code>..</code> sequences in request paths. Prevents access to parent directories.</p>
+                </div>
+                <div class="security-item">
+                    <h4>Sensitive Path Blocking</h4>
+                    <p>Hardcoded blocks on <code>.git/</code>, <code>.env</code>, <code>src/</code>, <code>build/</code>, and Makefiles prevent accidental exposure.</p>
+                </div>
+                <div class="security-item">
+                    <h4>Extension Whitelisting</h4>
+                    <p>Optional configuration to restrict served file types. Default allows common web assets (html, css, js, images, text).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="configuration-section">
+            <h2>Configuration</h2>
+            <p>servec reads from <code>~/.config/servec/config</code> with these options:</p>
+            <div class="config-options">
+                <div class="option">
+                    <code class="option-name">port</code>
+                    <p>Listen port. Default: 6969. Can be overridden via command line argument.</p>
+                </div>
+                <div class="option">
+                    <code class="option-name">root_dir</code>
+                    <p>Directory to serve files from. Default: current directory.</p>
+                </div>
+                <div class="option">
+                    <code class="option-name">error_404 / error_500</code>
+                    <p>Custom HTML files for error responses. Falls back to simple defaults if not configured.</p>
+                </div>
+                <div class="option">
+                    <code class="option-name">thread_pool_size</code>
+                    <p>Number of worker threads. Default: 4. Adjust based on system resources and expected load.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="request-flow">
+            <h2>Request Handling</h2>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Accept Connection</h4>
+                        <p>Main thread accepts incoming TCP connection</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Submit to Pool</h4>
+                        <p>Connection handed to thread pool for processing</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Parse Request</h4>
+                        <p>Worker thread reads HTTP request and validates path</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Security Check</h4>
+                        <p>Checks for traversal attacks, extension whitelist, and blocked paths</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Serve Response</h4>
+                        <p>Files served with appropriate MIME type, or error pages returned</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="architecture.js"></script>
+</body>
+</html>
