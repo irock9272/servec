@@ -130,6 +130,11 @@ void handle_request(int client_socket) {
         return;
     }
     
+    // Default to index.html if root is requested
+    if (strcmp(path, "/") == 0) {
+        strcpy(path, "/index.html");
+    }
+    
     if (!is_path_safe(path) || !is_ext_allowed(path, &g_config)) {
         send_404(client_socket);
         close(client_socket);
@@ -143,11 +148,6 @@ void handle_request(int client_socket) {
         send_404(client_socket);
         close(client_socket);
         return;
-    }
-    
-    // Default to index.html if root is requested
-    if (strcmp(path, "/") == 0) {
-        strcpy(path, "/index.html");
     }
     
     // Prevent directory traversal attacks
