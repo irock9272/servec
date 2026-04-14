@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -O2
 SRCDIR = src
 BUILDDIR = build
-TARGET = $(BUILDDIR)/http_server
+TARGET = $(BUILDDIR)/servec
 SRCS = $(SRCDIR)/http_server.c $(SRCDIR)/config.c
 
 all: $(TARGET)
