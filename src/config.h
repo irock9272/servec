@@ -14,6 +14,9 @@ typedef struct {
     char error_500[MAX_PATH_LEN];
     bool use_custom_404;
     bool use_custom_500;
+    char allowed_exts[10][16];  // Array of up to 10 extensions, each max 15 chars + null
+    int allowed_exts_count;  // Number of allowed extensions
+    bool use_allowed_exts;   // Whether to enforce allowed extensions
 } ServerConfig;
 
 // Load configuration from ~/.config/servec/config

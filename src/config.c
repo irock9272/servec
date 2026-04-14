@@ -62,6 +62,8 @@ bool load_config(ServerConfig* config) {
     config->error_500[0] = '\0';
     config->use_custom_404 = false;
     config->use_custom_500 = false;
+    config->use_allowed_exts = false;
+    config->allowed_exts_count = 0;
     
     // Build config file path
     char config_path[MAX_PATH_LEN];
@@ -102,6 +104,21 @@ bool load_config(ServerConfig* config) {
             strncpy(config->error_500, value, MAX_PATH_LEN - 1);
             config->error_500[MAX_PATH_LEN - 1] = '\0';
             config->use_custom_500 = true;
+        } else if (strcmp(key, "allowed_exts") == 0) {
+            config->allowed_exts_count = 0;
+            char* exts_copy = strdup(value);
+            char* token = strtok(exts_copy, ",");
+            while (token != NULL && config->allowed_exts_count < 10) {
+                char* trimmed_ext = trim(token);
+                if (trimmed_ext[0] != 0) {
+                    strncpy(config->allowed_exts[config->allowed_exts_count], trimmed_ext, 15);
+                    config->allowed_exts[config->allowed_exts_count][15] = 0;
+                    config->allowed_exts_count++;
+                }
+                token = strtok(NULL, ",");
+            }
+            free(exts_copy);
+            config->use_allowed_exts = (config->allowed_exts_count > 0);
         }
     }
     

@@ -34,6 +34,7 @@ port = 6969
 root_dir = .
 error_404 = ./error_404.html
 error_500 = ./error_500.html
+allowed_exts = html,css,js,png,jpg,gif,ico
 ```
 
 ### Configuration Options
@@ -44,6 +45,7 @@ error_500 = ./error_500.html
 | `root_dir` | Root directory for serving files | `.` (current directory) |
 | `error_404` | Path to custom 404 error page | `./error_404.html` |
 | `error_500` | Path to custom 500 error page | `./error_500.html` |
+| `allowed_exts` | Comma-separated list of allowed file extensions | (empty = all allowed) |
 
 ## Building
 
